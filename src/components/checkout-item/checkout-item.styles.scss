@@ -22,8 +22,22 @@
     width: 23%;
   }
 
+  .price {
+    padding-left: 30px;
+  }
+
   .quantity {
-    padding-left: 20px;
+    padding-left: 30px;
+    display: flex;
+
+    .arrow {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .value {
+      margin: auto 10px;
+    }
   }
 
   .remove-button {
