@@ -5,10 +5,13 @@ import "./menu-item.styles.scss";
 
 const MenuItem = ({ title, imageUrl, size, linkUrl }) => {
   const navigate = useNavigate();
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
 
   return (
-    <div className={`${size} menu-item`} onClick={() => navigate(`${pathname}${linkUrl}`)}>
+    <div
+      className={`${size} menu-item`}
+      onClick={() => navigate(`${pathname}${linkUrl}`)}
+    >
       <div
         className="background-image"
         style={{ backgroundImage: `url(${imageUrl})` }}
