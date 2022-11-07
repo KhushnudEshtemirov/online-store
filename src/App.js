@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
@@ -10,38 +10,37 @@ import SignInAndSignUp from "./pages/signin-and-signup/signin-and-signup.compone
 import CheckoutPage from "./pages/checkout/checkout.component";
 
 import { selectCurrentUser } from "./redux/user/user.selectors";
+import { checkUserSession } from "./redux/user/user.actions";
 
 import "./App.css";
 
-class App extends React.Component {
-  unsubscribeFromAuth = null;
-
-  componentWillUnmount() {
-    this.unsubscribeFromAuth();
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <Header />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/shop/*" element={<ShopPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route
-            path="/signin"
-            element={
-              this.props.currentUser ? <Navigate to="/" /> : <SignInAndSignUp />
-            }
-          />
-        </Routes>
-      </div>
-    );
-  }
-}
+const App = ({ checkUserSession, currentUser }) => {
+  useEffect(() => {
+    checkUserSession();
+  }, [checkUserSession]);
+  
+  return (
+    <div className="App">
+      <Header />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/shop/*" element={<ShopPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route
+          path="/signin"
+          element={currentUser ? <Navigate to="/" /> : <SignInAndSignUp />}
+        />
+      </Routes>
+    </div>
+  );
+};
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
 });
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => ({
+  checkUserSession: () => dispatch(checkUserSession()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
